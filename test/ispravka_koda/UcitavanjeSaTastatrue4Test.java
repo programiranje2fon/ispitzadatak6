@@ -1,4 +1,4 @@
-package zadatak.ispravka_koda;
+package ispravka_koda;
 
 import static org.junit.Assert.assertTrue;
 
