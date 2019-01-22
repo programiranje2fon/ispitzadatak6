@@ -1,4 +1,4 @@
-package zadatak.poruke.sms;
+package poruke.sms;
 
 import static org.junit.Assert.assertTrue;
 

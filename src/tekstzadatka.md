@@ -16,7 +16,7 @@ Napraviti javnu klasu **SMS** u paketu **poruke.sms** koja nasleđuje klasu Poru
 znakova. U slučaju unosa nedozvoljenih vrednosti baciti izuzetak sa odgovarajućim tekstom.
 
 Napraviti javni interfejs **SMSAPI** u paketu **poruke.sms.api** koji ima:
-* Javnu metodu vratiPoruke koja kao ulaz prima identifikator korisnika i vraća listu objek. Poruka.
+* Javnu metodu vratiPoruke koja kao ulaz prima identifikator korisnika i vraća listu objekata Poruka.
 * Javnu metodu arhivirajPoruke koja nema ulazne parametre i ne vraća ništa.
 
 Napraviti javnu klasu **SMSCentrala** u paketu **poruke** koja implem. interfejs **SMSAPI** i ima:

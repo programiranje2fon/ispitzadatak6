@@ -1,4 +1,4 @@
-package zadatak.poruke;
+package poruke;
 
 import static org.junit.Assert.assertTrue;
 

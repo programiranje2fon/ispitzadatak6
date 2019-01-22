@@ -10,10 +10,10 @@ import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 
-import zadatak.poruke.PorukaTest;
-import zadatak.poruke.SMSCentralaTest;
-import zadatak.poruke.sms.SMSTest;
-import zadatak.poruke.sms.api.SMSAPITest;
+import poruke.PorukaTest;
+import poruke.SMSCentralaTest;
+import poruke.sms.SMSTest;
+import poruke.sms.api.SMSAPITest;
 
 
 /**
