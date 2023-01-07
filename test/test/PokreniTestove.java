@@ -10,6 +10,7 @@ import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 
+import ispravka_koda.UcitavanjeSaTastatrue4Test;
 import poruke.PorukaTest;
 import poruke.SMSCentralaTest;
 import poruke.sms.SMSTest;
@@ -27,6 +28,7 @@ public class PokreniTestove {
 		runTestsForClass(SMSTest.class);
 		runTestsForClass(SMSAPITest.class);
 		runTestsForClass(SMSCentralaTest.class);
+		runTestsForClass(UcitavanjeSaTastatrue4Test.class);
 
 		
 	}
