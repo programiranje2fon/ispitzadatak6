@@ -1,0 +1,213 @@
+package poruke;
+
+import java.util.GregorianCalendar;
+
+public abstract class Poruka {
+	
+	private String posiljalac, primalac, poruka;
+	private GregorianCalendar vreme;
+	
+	public String getPosiljalac() {
+		return posiljalac;
+	}
+	
+	public void setPosiljalac(String posiljalac) {
+		if (posiljalac==null || posiljalac.equals(""))
+			throw new RuntimeException("Morate uneti posiljaoca");
+		
+		this.posiljalac = posiljalac;
+	}
+	
+	public String getPrimalac() {
+		return primalac;
+	}
+	
+	public void setPrimalac(String primalac) {
+		if (primalac==null || primalac.equals(""))
+			throw new RuntimeException("Morate uneti primaoca");
+		
+		this.primalac = primalac;
+	}
+	
+	public String getPoruka() {
+		return poruka;
+	}
+	
+	public void setPoruka(String poruka) {
+		if (poruka==null)
+			throw new RuntimeException("Morate uneti poruku");
+		
+		this.poruka = poruka;
+	}
+	
+	public GregorianCalendar getVreme() {
+		return vreme;
+	}
+	
+	public void setVreme(GregorianCalendar vreme) {
+		if (vreme==null)
+			throw new RuntimeException("Morate uneti vreme");
+		
+		this.vreme = vreme;
+	}
+	
+	public String toString(){
+		return "POSILJALAC:"+posiljalac+" PRIMALAC:"+primalac+" PORUKA:"+poruka;
+	}
+
+}
+
+package poruke.sms;
+
+import poruke.Poruka;
+
+public class SMS extends Poruka {
+	
+	public void setPoruka(String poruka){
+		if (poruka==null || poruka.length()>170)
+			throw new RuntimeException("Morate uneti poruku koja nije duza od 170 znakova");
+		
+		super.setPoruka(poruka);
+	}
+
+}
+
+package poruke.sms.api;
+
+import java.util.LinkedList;
+
+import poruke.Poruka;
+
+public interface SMSAPI {
+	
+	public LinkedList<Poruka> vratiPoruke (String korisnik);
+	
+	public void arhivirajPoruke();
+
+}
+
+package poruke;
+
+import java.io.*;
+import java.util.GregorianCalendar;
+import java.util.LinkedList;
+
+import poruke.sms.api.SMSAPI;
+
+public class SMSCentrala implements SMSAPI {
+	
+	private Poruka[] poruke = new Poruka[1000];
+	
+	public void unesi(Poruka p){
+		for (int i = 0; i < poruke.length; i++) 
+			if (poruke[i]==null){
+				poruke[i]=p;
+				break;
+			}
+		
+		try{
+			PrintWriter out = new PrintWriter(new FileWriter("backup.txt"));
+			
+			for (int i = 0; i < poruke.length; i++)
+				if (poruke[i]!=null)
+					out.println(poruke[i]);
+			
+			out.close();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+
+	public void arhivirajPoruke() {
+		//Izracunavanje koja je prosla godina
+		int proslaGodina = new GregorianCalendar().get(GregorianCalendar.YEAR)-1;
+		
+		try{
+			PrintWriter out = new PrintWriter(new FileWriter("arhiva.txt"));
+			//Prolazenje kroz niz i smestanje svake poruke koja nije null i
+			//koja je iz prosle godine u fajl i brisanje iz niza
+			for (int i = 0; i < poruke.length; i++) 
+				if (poruke[i]!=null && 
+				poruke[i].getVreme().get(GregorianCalendar.YEAR)==proslaGodina){
+					//Upisivanje poruke u fajl
+					out.println(poruke[i].toString());
+					//Tek onda brisanje poruke iz niza
+					poruke[i]=null;
+				}
+			
+			out.close();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	public LinkedList<Poruka> vratiPoruke(String korisnik) {
+		LinkedList<Poruka> novePoruke = new LinkedList<Poruka>();
+		
+		//Pretrazivanje liste poruka i pronalazenje poruka koje imaju
+		//bar dva smajlija. Prvi smajli se pronalazi preko indexOf metode
+		//pretragom celog teksta poruke tj. poruke[i].getPoruka().indexOf(":)")
+		//a drugi preko indexOf metode ali pretragom onog dela teksta poruke
+		//koji je posle prvog smajlija tj pretrazuje se u okviru
+		//poruke[i].getPoruka().substring(poruke[i].getPoruka().indexOf(":)")+2).
+		for (int i = 0; i < poruke.length; i++)
+			if (poruke[i]!=null &&
+				poruke[i].getPoruka().indexOf(":)")!=-1 &&
+				poruke[i].getPoruka().substring(poruke[i].getPoruka().indexOf(":)")+2).indexOf(":)")!=-1){
+					//Svaka takva poruka koja se nadje, se unosi u listu ali tako da poruke budu
+					//poredjane po vremenu poruke. Kad se u novoj listi nadje poruka koja je
+					//poslata kasnije od nove, nova se unosi na njeno mesto a sve ostale se 
+					//pomeraju udesno.
+					for (int j = 0; j < novePoruke.size(); j++)
+						if (poruke[i].getVreme().before(novePoruke.get(j).getVreme())){
+							novePoruke.add(j, poruke[i]);
+							break;
+						}
+								
+					//Ako nova poruka ipak nije uneta (najnovijeg je datuma ili
+					//je lista prazna, unosi se na kraj liste
+					if (!novePoruke.contains(poruke[i]))
+						novePoruke.addLast(poruke[i]);
+					}
+				
+		
+		return novePoruke;
+	}
+
+	
+
+}
+
+package ispravka_koda;
+
+import java.util.Scanner;
+
+public class UcitavanjeSaTastature4 {
+	public static void ucitajIIzracunajNumeroloskiBroj() {
+		Scanner s = new Scanner(System.in);
+		System.out.println("Unesite dan,mesec i godinu u 3 reda");
+		int brojSaSvimCiframa = (s.nextInt() * 100 + s.nextInt()) * 1000 + s.nextInt();
+		int sumaCifara;
+		do {
+			sumaCifara = 0;
+			while (brojSaSvimCiframa > 0) {
+				sumaCifara = sumaCifara + brojSaSvimCiframa % 10;
+				brojSaSvimCiframa = brojSaSvimCiframa / 10;
+			}
+			
+			brojSaSvimCiframa = sumaCifara;
+		} while (sumaCifara > 9 && sumaCifara != 11 && sumaCifara != 22);
+		System.out.println("Vas numeroloski broj je: " + sumaCifara);
+	}
+}
+
+package ispravka_koda;
+
+public class Provera {
+
+	public static void main(String[] args) {
+		UcitavanjeSaTastature4.ucitajIIzracunajNumeroloskiBroj();
+	}
+
+}
