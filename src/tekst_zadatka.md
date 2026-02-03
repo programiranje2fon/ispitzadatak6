@@ -1,15 +1,15 @@
-#Zadatak 6
+# Zadatak 1
 
 Napraviti javnu apstraktnu klasu **Poruka** u paketu **poruke** koja ima:
 * Privatni atribut **posiljalac** koji predstavlja identifikator korisnika koji je poslao poruku (String).
 * Privatni atribut **primalac** koji predstavlja identifikator korisnika koji treba da primi poruku (String).
 * Privatni atribut **poruka** koji predstavlja tekst poruke.
-* Privatni atribut **vreme** koji predstavlja datum i vreme slanja poruke (klasa GregorianCalendar)
+* Privatni atribut **vreme** koji predstavlja datum i vreme slanja poruke (klasa LocalDateTime)
 * OdgovarajuÄ‡e javne get i set metode za ove atribute. Nedozvoljene vrednosti za atribute poÅ¡iljalac i
 primalac su NULL i prazan String, a poruka i vreme ne smeju biti NULL. U sluÄaju unosa ovih
 nedozvoljenih vrednosti potrebno je baciti izuzetak sa odgovarajuÄ‡im tekstom.
 * Redefinisanu metodu toString klase Object koja vraÄ‡a String u kome se nalaze neki podaci poruke u
-formatu **â€œPOSILJALAC_####_PRIMALAC_####_PORUKA_####â€**.
+formatu **â€œPOSILJALAC #### PRIMALAC #### PORUKA ####â€**.
 
 Napraviti javnu klasu **SMS** u paketu **poruke.sms** koja nasleÄ‘uje klasu Poruka i ima:
 * __Redefinisanu__ metodu setPoruka koja ne dozvoljava unos NULL Stringa, ali ni Stringa duÅ¾eg od 170
@@ -32,25 +32,25 @@ niza.
 smajlija. Poruke u listi treba da budu poreÄ‘ane tako da na poÄetku budu najstarije poruke pa tek
 onda novije. Pri tome, zna se da se smajli piÅ¡e iskljuÄivo na ovaj naÄin: :)
 
-#Zadatak 6 - Ispravka koda
+# Zadatak 2 - Ispravka koda
 
-U produetku teksta je dat kod klase sa metodom koja bi trebalo da sa tastature uèita 3 cela broja u tri reda
-koji predstavljaju dan, mesec i godinu roğenja neke osobe. Nakon toga, metoda bi trebalo da izraèuna
-numerološki horoskopski znak (odnosno broj) te osobe. Numerološki znaci su brojevi 1, 2, 3, 4, 5, 6, 7, 8, 9,
-ali i 11 i 22. Numerološki broj se izraèunava tako što se saberu sve cifre iz dana, meseca i godine roğenja
-osobe. Moguæe je da rezultat takvog sabiranja bude i neki dvocifren broj koji nije 11 ili 22, pa se onda
+U produÅ¾etku teksta je dat kod klase sa metodom koja bi trebalo da sa tastature uÄita 3 cela broja u tri reda
+koji predstavljaju dan, mesec i godinu roÄ‘enja neke osobe. Nakon toga, metoda bi trebalo da izraÄuna
+numeroloÅ¡ki horoskopski znak (odnosno broj) te osobe. NumeroloÅ¡ki znaci su brojevi 1, 2, 3, 4, 5, 6, 7, 8, 9,
+ali i 11 i 22. NumeroloÅ¡ki broj se izraÄunava tako Å¡to se saberu sve cifre iz dana, meseca i godine roÄ‘enja
+osobe. MoguÄ‡e je da rezultat takvog sabiranja bude i neki dvocifren broj koji nije 11 ili 22, pa se onda
 sabiranje cifara ponavlja nad novodobijenim rezultatom koliko god puta je potrebno. Na primer:
-1. za osobu roğenu datuma 1.1.2000. numerološki znak je 1 + 1 + 2 + 0 + 0 + 0 = 4
-2. za osobu roğenu datuma 28.12.1980. numerološki znak je 2 + 8 + 1 + 2 + 1 + 9 + 8 + 0 = 31 (pa se
+1. za osobu roÄ‘enu datuma 1.1.2000. numeroloÅ¡ki znak je 1 + 1 + 2 + 0 + 0 + 0 = 4
+2. za osobu roÄ‘enu datuma 28.12.1980. numeroloÅ¡ki znak je 2 + 8 + 1 + 2 + 1 + 9 + 8 + 0 = 31 (pa se
 nastavlja sabiranje) = 3 + 1 = 4
-3. za osobu roğenu datuma 9.12.1979. numerološki znak je 9 + 1 + 2 + 1 + 9 + 7 + 9 = 38 = 3 + 8 = 11
-4. za osobu roğenu datuma 9.12.1978. numerološki znak je 9 + 1 + 2 + 1 + 9 + 7 + 8 = 37 = 3 + 7 = 10
+3. za osobu roÄ‘enu datuma 9.12.1979. numeroloÅ¡ki znak je 9 + 1 + 2 + 1 + 9 + 7 + 9 = 38 = 3 + 8 = 11
+4. za osobu roÄ‘enu datuma 9.12.1978. numeroloÅ¡ki znak je 9 + 1 + 2 + 1 + 9 + 7 + 8 = 37 = 3 + 7 = 10
 = 1 + 0 = 1
 
 
-Dati kod se kompajlira, ali ne radi to šta treba. Napraviti javnu klasu **UcitavanjeSaTastature4** u paketu
-**ispravka_koda**, prekucati u nju kod koji je dat i, __uz minimalne izmene__ ga ispraviti tako da funkcioniše
-kako treba. Napraviti test klasu i, koristeæi njenu main metodu, pozvati metodu
+Dati kod se kompajlira, ali ne radi to Å¡ta treba. Napraviti javnu klasu **UcitavanjeSaTastature4** u paketu
+**ispravka_koda**, prekucati u nju kod koji je dat i, __uz minimalne izmene__ ga ispraviti tako da funkcioniÅ¡e
+kako treba. Napraviti test klasu i, koristeÄ‡i njenu main metodu, pozvati metodu
 **ucitajIIzracunajNumeroloskiBroj()** i proveriti njen rad.
 
 	package ispravka_koda;
