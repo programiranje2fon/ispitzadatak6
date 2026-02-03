@@ -1,50 +1,50 @@
 package poruke;
 
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 
 public abstract class Poruka {
-	
+
 	private String posiljalac, primalac, poruka;
-	private GregorianCalendar vreme;
-	
+	private LocalDateTime vreme;
+
 	public String getPosiljalac() {
 		return posiljalac;
 	}
-	
+
 	public void setPosiljalac(String posiljalac) {
 		if (posiljalac==null || posiljalac.equals(""))
 			throw new RuntimeException("Morate uneti posiljaoca");
-		
+
 		this.posiljalac = posiljalac;
 	}
-	
+
 	public String getPrimalac() {
 		return primalac;
 	}
-	
+
 	public void setPrimalac(String primalac) {
 		if (primalac==null || primalac.equals(""))
 			throw new RuntimeException("Morate uneti primaoca");
-		
+
 		this.primalac = primalac;
 	}
-	
+
 	public String getPoruka() {
 		return poruka;
 	}
-	
+
 	public void setPoruka(String poruka) {
 		if (poruka==null)
 			throw new RuntimeException("Morate uneti poruku");
-		
+
 		this.poruka = poruka;
 	}
-	
-	public GregorianCalendar getVreme() {
+
+	public LocalDateTime getVreme() {
 		return vreme;
 	}
-	
-	public void setVreme(GregorianCalendar vreme) {
+
+	public void setVreme(LocalDateTime vreme) {
 		if (vreme==null)
 			throw new RuntimeException("Morate uneti vreme");
 		
@@ -89,29 +89,29 @@ public interface SMSAPI {
 package poruke;
 
 import java.io.*;
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 
 import poruke.sms.api.SMSAPI;
 
 public class SMSCentrala implements SMSAPI {
-	
+
 	private Poruka[] poruke = new Poruka[1000];
-	
+
 	public void unesi(Poruka p){
-		for (int i = 0; i < poruke.length; i++) 
+		for (int i = 0; i < poruke.length; i++)
 			if (poruke[i]==null){
 				poruke[i]=p;
 				break;
 			}
-		
+
 		try{
 			PrintWriter out = new PrintWriter(new FileWriter("backup.txt"));
-			
+
 			for (int i = 0; i < poruke.length; i++)
 				if (poruke[i]!=null)
 					out.println(poruke[i]);
-			
+
 			out.close();
 		}catch(Exception e){
 			e.printStackTrace();
@@ -120,31 +120,31 @@ public class SMSCentrala implements SMSAPI {
 
 	public void arhivirajPoruke() {
 		//Izracunavanje koja je prosla godina
-		int proslaGodina = new GregorianCalendar().get(GregorianCalendar.YEAR)-1;
-		
+		int proslaGodina = LocalDateTime.now().minusYears(1).getYear();
+
 		try{
 			PrintWriter out = new PrintWriter(new FileWriter("arhiva.txt"));
 			//Prolazenje kroz niz i smestanje svake poruke koja nije null i
 			//koja je iz prosle godine u fajl i brisanje iz niza
-			for (int i = 0; i < poruke.length; i++) 
-				if (poruke[i]!=null && 
-				poruke[i].getVreme().get(GregorianCalendar.YEAR)==proslaGodina){
+			for (int i = 0; i < poruke.length; i++)
+				if (poruke[i]!=null &&
+				poruke[i].getVreme().getYear()==proslaGodina){
 					//Upisivanje poruke u fajl
 					out.println(poruke[i].toString());
 					//Tek onda brisanje poruke iz niza
 					poruke[i]=null;
 				}
-			
+
 			out.close();
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
 	public LinkedList<Poruka> vratiPoruke(String korisnik) {
 		LinkedList<Poruka> novePoruke = new LinkedList<Poruka>();
-		
+
 		//Pretrazivanje liste poruka i pronalazenje poruka koje imaju
 		//bar dva smajlija. Prvi smajli se pronalazi preko indexOf metode
 		//pretragom celog teksta poruke tj. poruke[i].getPoruka().indexOf(":)")
@@ -157,10 +157,10 @@ public class SMSCentrala implements SMSAPI {
 				poruke[i].getPoruka().substring(poruke[i].getPoruka().indexOf(":)")+2).indexOf(":)")!=-1){
 					//Svaka takva poruka koja se nadje, se unosi u listu ali tako da poruke budu
 					//poredjane po vremenu poruke. Kad se u novoj listi nadje poruka koja je
-					//poslata kasnije od nove, nova se unosi na njeno mesto a sve ostale se 
+					//poslata kasnije od nove, nova se unosi na njeno mesto a sve ostale se
 					//pomeraju udesno.
 					for (int j = 0; j < novePoruke.size(); j++)
-						if (poruke[i].getVreme().before(novePoruke.get(j).getVreme())){
+						if (poruke[i].getVreme().isBefore(novePoruke.get(j).getVreme())){
 							novePoruke.add(j, poruke[i]);
 							break;
 						}
