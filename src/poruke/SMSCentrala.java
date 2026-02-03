@@ -1,7 +1,7 @@
 package poruke;
 
 import java.io.*;
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 
 import poruke.sms.api.SMSAPI;
@@ -32,7 +32,7 @@ public class SMSCentrala implements SMSAPI {
 
 	public void arhivirajPoruke() {
 		//Izracunavanje koja je prosla godina
-		int proslaGodina = new GregorianCalendar().get(GregorianCalendar.YEAR)-1;
+		int proslaGodina = LocalDateTime.now().minusYears(1).getYear();
 		
 		try{
 			PrintWriter out = new PrintWriter(new FileWriter("arhiva.txt"));
@@ -40,7 +40,7 @@ public class SMSCentrala implements SMSAPI {
 			//koja je iz prosle godine u fajl i brisanje iz niza
 			for (int i = 0; i < poruke.length; i++) 
 				if (poruke[i]!=null && 
-				poruke[i].getVreme().get(GregorianCalendar.YEAR)==proslaGodina){
+				poruke[i].getVreme().getYear()==proslaGodina){
 					//Upisivanje poruke u fajl
 					out.println(poruke[i].toString());
 					//Tek onda brisanje poruke iz niza
@@ -72,7 +72,7 @@ public class SMSCentrala implements SMSAPI {
 					//poslata kasnije od nove, nova se unosi na njeno mesto a sve ostale se 
 					//pomeraju udesno.
 					for (int j = 0; j < novePoruke.size(); j++)
-						if (poruke[i].getVreme().before(novePoruke.get(j).getVreme())){
+						if (poruke[i].getVreme().isBefore(novePoruke.get(j).getVreme())){
 							novePoruke.add(j, poruke[i]);
 							break;
 						}

@@ -6,7 +6,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Modifier;
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 
 import org.junit.After;
@@ -117,10 +117,10 @@ public class SMSCentralaTest {
 
 	private LinkedList<Poruka> vratiListu() {
 		LinkedList<Poruka> lista = new LinkedList<>();
-		int proslaGodina = new GregorianCalendar().get(GregorianCalendar.YEAR) - 1;
+		int proslaGodina = LocalDateTime.now().minusYears(1).getYear();
 		Poruka[] poruke = (Poruka[]) TestUtil.getFieldValue(instance, "poruke");
 		for (Poruka p : poruke) {
-			if (p != null && p.getVreme().get(GregorianCalendar.YEAR) == proslaGodina) {
+			if (p != null && p.getVreme().getYear() == proslaGodina) {
 				lista.add(p);
 			}
 		}
@@ -174,9 +174,8 @@ public class SMSCentralaTest {
 		String poruka = "Zdravo";
 		String posiljalac = "Marko";
 		String primalac = "Darko";
-		GregorianCalendar vreme = new GregorianCalendar();
-		GregorianCalendar vreme1 = new GregorianCalendar();
-		vreme1.add(GregorianCalendar.YEAR, -1);
+        LocalDateTime vreme = LocalDateTime.now();
+        LocalDateTime vreme1 = LocalDateTime.now().minusYears(1);
 
 		p.setPoruka(poruka);
 		p.setPosiljalac(posiljalac);
@@ -229,7 +228,7 @@ public class SMSCentralaTest {
 					&& poruke[i].getPoruka().substring(poruke[i].getPoruka().indexOf(":)") + 2).indexOf(":)") != -1) {
 
 				for (int j = 0; j < novePoruke.size(); j++)
-					if (poruke[i].getVreme().before(novePoruke.get(j).getVreme())) {
+					if (poruke[i].getVreme().isBefore(novePoruke.get(j).getVreme())) {
 						novePoruke.add(j, poruke[i]);
 						break;
 					}
@@ -248,9 +247,8 @@ public class SMSCentralaTest {
 		String poruka2 = ":)Zdravo :)";
 		String posiljalac = "Marko";
 		String primalac = "Darko";
-		GregorianCalendar vreme = new GregorianCalendar();
-		GregorianCalendar vreme1 = new GregorianCalendar();
-		vreme1.add(GregorianCalendar.YEAR, -1);
+        LocalDateTime vreme = LocalDateTime.now();
+        LocalDateTime vreme1 = LocalDateTime.now().minusYears(1);
 
 		p.setPoruka(poruka);
 		p.setPosiljalac(posiljalac);
@@ -293,8 +291,8 @@ public class SMSCentralaTest {
 		for (int i = 0; i < ocekivana.size(); i++) {
 			Poruka p1 = ocekivana.get(i);
 			Poruka p2 = stvarna.get(i);
-			assertTrue("U listi se poruka sa vremenom " + p2.getVreme().getTime().toString() + " nalazi pre poruke "
-					+ p1.getVreme().getTime().toString(), p1.equals(p2) || p1.getVreme().equals(p2.getVreme()));
+			assertTrue("U listi se poruka sa vremenom " + p2.getVreme() + " nalazi pre poruke "
+					+ p1.getVreme(), p1.equals(p2) || p1.getVreme().equals(p2.getVreme()));
 		}
 	}
 }

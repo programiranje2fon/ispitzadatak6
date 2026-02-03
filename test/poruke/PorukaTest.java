@@ -3,7 +3,7 @@ package poruke;
 import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.Modifier;
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 
 import org.junit.After;
 import org.junit.Before;
@@ -169,29 +169,29 @@ public class PorukaTest {
 	@Test
 	public void metoda_setVreme_vidljivost() {
 		assertTrue("Metoda setVreme nije javna", TestUtil.hasMethodModifier(Poruka.class, "setVreme",
-				new Class<?>[] { GregorianCalendar.class }, Modifier.PUBLIC));
+				new Class<?>[] { LocalDateTime.class }, Modifier.PUBLIC));
 	}
 
 	@Test(expected = RuntimeException.class)
 	public void metoda_setVreme_null() {
-		GregorianCalendar vreme = null;
+        LocalDateTime vreme = null;
 		instance.setVreme(vreme);
 		assertTrue("Za prosledjeni argument null metoda setVreme ne baca neproveravani izuzetak", false);
 	}
 
 	@Test
 	public void metoda_setVreme_trenutniDatum() {
-		GregorianCalendar vreme = new GregorianCalendar();
+        LocalDateTime vreme = LocalDateTime.now();
 		try {
 			instance.setVreme(vreme);
 		} catch (RuntimeException e) {
-			assertTrue("Za prosledjeni argument " + vreme.getTime().toString()
+			assertTrue("Za prosledjeni argument " + vreme
 					+ " metoda setVreme baca neproveravani izuzetak", false);
 		}
-		GregorianCalendar actual = (GregorianCalendar) TestUtil.getFieldValue(instance, "vreme");
+        LocalDateTime actual = (LocalDateTime) TestUtil.getFieldValue(instance, "vreme");
 		assertTrue(
-				"Za prosledjeni argument " + vreme.getTime().toString()
-						+ ", nakon izvrsetka metode setVreme vrednost abributa vreme je " + actual.getTime().toString(),
+				"Za prosledjeni argument " + vreme
+						+ ", nakon izvrsetka metode setVreme vrednost abributa vreme je " + actual,
 				vreme.equals(actual));
 	}
 

@@ -1,11 +1,11 @@
 package poruke;
 
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 
 public abstract class Poruka {
 	
 	private String posiljalac, primalac, poruka;
-	private GregorianCalendar vreme;
+	private LocalDateTime vreme;
 	
 	public String getPosiljalac() {
 		return posiljalac;
@@ -40,11 +40,11 @@ public abstract class Poruka {
 		this.poruka = poruka;
 	}
 	
-	public GregorianCalendar getVreme() {
+	public LocalDateTime getVreme() {
 		return vreme;
 	}
 	
-	public void setVreme(GregorianCalendar vreme) {
+	public void setVreme(LocalDateTime vreme) {
 		if (vreme==null)
 			throw new RuntimeException("Morate uneti vreme");
 		
